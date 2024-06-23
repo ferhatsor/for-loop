@@ -15,7 +15,11 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    printf("Datei %s erfolgreich geöffnet.\n", file_path);
+    char zeichen;
+
+    while ((zeichen = fgetc(datei)) != EOF) {
+        printf("%c", zeichen);
+    }
 
     fclose(datei);
 
