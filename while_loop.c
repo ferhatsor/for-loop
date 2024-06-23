@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(int argc, char *argv[]) {
     if (argc < 2) {
@@ -15,13 +16,25 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    char zeichen;
+    fseek(datei, 0, SEEK_END);
+    long file_size = ftell(datei);
+    fseek(datei, 0, SEEK_SET);
 
-    while ((zeichen = fgetc(datei)) != EOF) {
-        printf("%c", zeichen);
+    char *content = malloc(file_size + 1);
+    if (content == NULL) {
+        printf("Fehler bei der Speicherallokierung\n");
+        fclose(datei);
+        return 1;
     }
 
+    size_t read_size = fread(content, 1, file_size, datei);
+    content[read_size] = '\0';
+
     fclose(datei);
+
+    printf("Dateiinhalt:\n%s\n", content);
+
+    free(content);
 
     return 0;
 }
